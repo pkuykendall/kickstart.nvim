@@ -616,6 +616,7 @@ require('lazy').setup({
         --
         -- But for many setups, the LSP (`ts_ls`) will work just fine
         -- ts_ls = {},
+        ruby_lsp = {},
       }
 
       -- Ensure the servers and tools above are installed
@@ -630,7 +631,10 @@ require('lazy').setup({
         'lua_ls', -- Lua Language server
         'stylua', -- Used to format Lua code
         -- You can add other tools here that you want Mason to install
+        'erb-formatter',
         'jq',
+        'markdownlint',
+        'prettier',
         'ruby_lsp',
         'rubyfmt',
         'standardrb',
@@ -709,7 +713,9 @@ require('lazy').setup({
         --
         -- You can use 'stop_after_first' to run the first available formatter from the list
         -- javascript = { "prettierd", "prettier", stop_after_first = true },
+        erb = { 'erb-formatter' },
         json = { 'jq' },
+        markdown = { 'prettier' },
         ruby = { 'rubyfmt' },
         toml = { 'taplo' },
       },
@@ -730,6 +736,20 @@ require('lazy').setup({
         },
       },
     },
+    config = function(_, opts)
+      require('conform').setup(opts)
+
+      -- Add custom options for markdown prettier
+      local markdown_formatter = vim.deepcopy(require 'conform.formatters.prettier')
+      require('conform.util').add_formatter_args(markdown_formatter, {
+        '--prose-wrap',
+        'always',
+        '--print-width',
+        '80',
+      }, { append = false })
+      ---@cast markdown_formatter conform.FormatterConfigOverride
+      require('conform').formatters.prettier_markdown = markdown_formatter
+    end,
   },
 
   { -- Autocompletion
@@ -752,12 +772,13 @@ require('lazy').setup({
           -- `friendly-snippets` contains a variety of premade snippets.
           --    See the README about individual language/framework/plugin snippets:
           --    https://github.com/rafamadriz/friendly-snippets
-          -- {
-          --   'rafamadriz/friendly-snippets',
-          --   config = function()
-          --     require('luasnip.loaders.from_vscode').lazy_load()
-          --   end,
-          -- },
+          {
+            'rafamadriz/friendly-snippets',
+            config = function()
+              require('luasnip.loaders.from_vscode').load()
+              require('luasnip').filetype_extend('ruby', { 'rails' })
+            end,
+          },
         },
         opts = {},
       },
@@ -787,7 +808,7 @@ require('lazy').setup({
         -- <c-k>: Toggle signature help
         --
         -- See :h blink-cmp-config-keymap for defining your own keymap
-        preset = 'default',
+        preset = 'super-tab',
 
         -- For more advanced Luasnip keymaps (e.g. selecting choice nodes, expansion) see:
         --    https://github.com/L3MON4D3/LuaSnip?tab=readme-ov-file#keymaps
@@ -888,6 +909,7 @@ require('lazy').setup({
 
   { -- Highlight, edit, and navigate code
     'nvim-treesitter/nvim-treesitter',
+    dependencies = { 'RRethy/nvim-treesitter-endwise' },
     config = function()
       local filetypes = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' }
       require('nvim-treesitter').install(filetypes)
