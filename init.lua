@@ -114,7 +114,7 @@ vim.o.showmode = false
 --  Schedule the setting after `UiEnter` because it can increase startup-time.
 --  Remove this option if you want your OS clipboard to remain independent.
 --  See `:help 'clipboard'`
-vim.schedule(function() vim.o.clipboard = 'unnamedplus' end)
+-- vim.schedule(function() vim.o.clipboard = 'unnamedplus' end)
 
 -- Enable break indent
 vim.o.breakindent = true
@@ -510,6 +510,7 @@ require('lazy').setup({
       'saghen/blink.cmp',
     },
     config = function()
+      vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, { desc = 'Code Action (includes Codebook add to dict)' })
       -- Brief aside: **What is LSP?**
       --
       -- LSP is an initialism you've probably heard, but might not understand what it is.
@@ -623,6 +624,7 @@ require('lazy').setup({
         --
         -- But for many setups, the LSP (`ts_ls`) will work just fine
         -- ts_ls = {},
+        bashls = {},
         ruby_lsp = {},
       }
 
@@ -638,12 +640,14 @@ require('lazy').setup({
         'lua_ls', -- Lua Language server
         'stylua', -- Used to format Lua code
         -- You can add other tools here that you want Mason to install
+        'codebook',
         'erb-formatter',
         'jq',
         'markdownlint',
         'prettier',
         'ruby_lsp',
         'rubyfmt',
+        'shfmt',
         'standardrb',
         'taplo',
       })
@@ -720,6 +724,7 @@ require('lazy').setup({
         --
         -- You can use 'stop_after_first' to run the first available formatter from the list
         -- javascript = { "prettierd", "prettier", stop_after_first = true },
+        bash = { 'shfmt' },
         erb = { 'erb-formatter' },
         json = { 'jq' },
         markdown = { 'prettier' },
@@ -783,11 +788,14 @@ require('lazy').setup({
             'rafamadriz/friendly-snippets',
             config = function()
               require('luasnip.loaders.from_vscode').load()
+              require('luasnip.loaders.from_vscode').load { paths = { vim.fn.stdpath 'config' .. '/snippets' } }
               require('luasnip').filetype_extend('ruby', { 'rails' })
             end,
           },
         },
-        opts = {},
+        opts = {
+          cut_selection_keys = '<Tab>',
+        },
       },
     },
     --- @module 'blink.cmp'
@@ -871,7 +879,7 @@ require('lazy').setup({
       -- Load the colorscheme here.
       -- Like many other themes, this one has different styles, and you could load
       -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
-      vim.cmd.colorscheme 'tokyonight-night'
+      -- vim.cmd.colorscheme 'tokyonight-night'
     end,
   },
 

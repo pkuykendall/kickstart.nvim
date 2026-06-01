@@ -14,6 +14,10 @@ return {
     build = 'cd app && yarn install',
     init = function() vim.g.mkdp_filetypes = { 'markdown' } end,
     ft = { 'markdown' },
+    config = function()
+      vim.keymap.set('n', '<Leader>mp', '<Plug>MarkdownPreview', { desc = 'Markdown Preview' })
+      vim.keymap.set('n', '<Leader>ms', '<Plug>MarkdownPreviewStop', { desc = 'Stop Markdown Preview' })
+    end,
   },
   {
     'arminveres/md-pdf.nvim',
@@ -21,9 +25,9 @@ return {
     lazy = true,
     keys = {
       {
-        '<leader>,',
+        '<leader>m,',
         function() require('md-pdf').convert_md_to_pdf() end,
-        desc = 'Markdown preview',
+        desc = 'Markdown to PDF',
       },
     },
     ---@type md-pdf.config

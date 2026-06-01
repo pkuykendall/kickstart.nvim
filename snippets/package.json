@@ -1,0 +1,11 @@
+{
+  "name": "duvet-snippets",
+  "contributes": {
+    "snippets": [
+      {
+        "language": ["toml"],
+        "path": "./toml.json"
+      }
+    ]
+  }
+}

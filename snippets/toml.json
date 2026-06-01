@@ -1,0 +1,50 @@
+{
+  "Duvet Spec Requirement": {
+    "prefix": "spec",
+    "body": [
+      "[[spec]]",
+      "level = \"${1|MUST,SHOULD,MAY|}\"",
+      "quote = '''",
+      "${TM_SELECTED_TEXT:$2}",
+      "'''"
+    ],
+    "description": "Duvet [[spec]] requirement entry"
+  },
+  "Duvet Exception": {
+    "prefix": "exception",
+    "body": [
+      "[[exception]]",
+      "target = \"${1:https://}\"",
+      "quote = '''",
+      "${TM_SELECTED_TEXT:$2}",
+      "'''",
+      "reason = '''",
+      "$3",
+      "'''"
+    ],
+    "description": "Duvet [[exception]] entry with reason"
+  },
+  "Duvet Todo": {
+    "prefix": "todo",
+    "body": [
+      "[[todo]]",
+      "target = \"${1:https://}\"",
+      "quote = '''",
+      "${TM_SELECTED_TEXT:$2}",
+      "'''",
+      "reason = '''",
+      "$3",
+      "'''",
+      "tracking_issue = \"${4:}\"",
+      "feature = \"${5:}\""
+    ],
+    "description": "Duvet [[todo]] entry with tracking"
+  },
+  "Duvet Target": {
+    "prefix": "target",
+    "body": [
+      "target = \"${1:https://www.rfc-editor.org/rfc/}${2:rfc}#${3:section}\""
+    ],
+    "description": "Duvet target URL line"
+  }
+}

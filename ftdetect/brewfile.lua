@@ -1,6 +1,5 @@
-vim.filetype.add({
+vim.filetype.add {
   filename = {
-    Brewfile = "ruby",
+    Brewfile = 'ruby',
   },
-})
-
+}
