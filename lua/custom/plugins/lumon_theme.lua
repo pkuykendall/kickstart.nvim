@@ -40,7 +40,7 @@
 return {
   {
     'bjarneo/aether.nvim',
-    branch = 'v2',
+    branch = 'v3',
     name = 'aether',
     priority = 1000,
     opts = {
@@ -49,9 +49,7 @@ return {
     config = function(_, opts)
       require('aether').setup(opts)
       vim.cmd.colorscheme 'lumon'
-
-      -- Enable hot reload
-      require('aether.hotreload').setup()
+      -- Hot reload registers itself from aether.setup/load as of v3; no call needed.
     end,
   },
 }
