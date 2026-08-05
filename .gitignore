@@ -5,6 +5,11 @@ nvim
 
 spell/
 
+# Machine-local overlay (work laptop extras, etc). Deployed by symlinking an
+# external repo to lua/overlay; never committed here. See doc/overlay.md.
+/lua/overlay
+/lua/overlay.lua
+
 # You can uncomment this yourself if you want to lock the lazy-lock.json,
 # but for kickstart, it makes sense to leave it ignored.
 #lazy-lock.json

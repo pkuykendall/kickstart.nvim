@@ -257,7 +257,7 @@ rtp:prepend(lazypath)
 --    :Lazy update
 --
 -- NOTE: Here is where you install your plugins.
-require('lazy').setup({
+local plugins = {
   -- NOTE: Plugins can be added via a link or github org/name. To run setup automatically, use `opts = {}`
   { 'NMAC427/guess-indent.nvim', opts = {} },
 
@@ -946,7 +946,15 @@ require('lazy').setup({
   -- Or use telescope!
   -- In normal mode type `<space>sh` then write `lazy.nvim-plugin`
   -- you can continue same window with `<space>sr` which resumes last telescope search
-}, {
+}
+
+-- Optional machine-local overlay (e.g. work laptop extras). Absent on a fresh
+-- clone, so `require` fails and is silently ignored. When present (deployed by
+-- symlinking `lua/overlay` into this config), it returns a list of lazy.nvim
+-- specs that are appended here. Keeps machine-specific tooling out of this repo.
+pcall(function() vim.list_extend(plugins, require 'overlay') end)
+
+require('lazy').setup(plugins, {
   ui = {
     -- If you are using a Nerd Font: set icons to an empty table which will use the
     -- default lazy.nvim defined Nerd Font icons, otherwise define a unicode icons table
