@@ -10,8 +10,8 @@ spell/
 /lua/overlay
 /lua/overlay.lua
 
-# You can uncomment this yourself if you want to lock the lazy-lock.json,
-# but for kickstart, it makes sense to leave it ignored.
-#lazy-lock.json
+# Plugin versions are intentionally not pinned in this repo, so each host can
+# resolve its own. Delete this line if you'd rather lock versions in git.
+lazy-lock.json
 
 .DS_Store
