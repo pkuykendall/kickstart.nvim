@@ -60,7 +60,7 @@ return {
     },
     config = function(_, opts)
       require('aether').setup(opts)
-      vim.cmd.colorscheme 'lumon'
+      vim.cmd.colorscheme 'tokyonight-night'
       -- Hot reload registers itself from aether.setup/load as of v3; no call needed.
     end,
   },
