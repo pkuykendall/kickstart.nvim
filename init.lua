@@ -192,6 +192,44 @@ vim.diagnostic.config {
 
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
 
+-- Toggle all diagnostics in the current buffer
+vim.keymap.set('n', '<leader>td', function()
+  local enable = not vim.diagnostic.is_enabled { bufnr = 0 }
+  vim.diagnostic.enable(enable, { bufnr = 0 })
+  vim.notify('Diagnostics ' .. (enable and 'enabled' or 'disabled') .. ' for buffer')
+end, { desc = '[T]oggle [D]iagnostics (buffer)' })
+
+-- Pick a single diagnostic source (markdownlint, codebook, an LSP, ...) to toggle in the current buffer.
+-- vim.diagnostic.get() ignores enablement, so disabled sources still appear and can be re-enabled.
+vim.keymap.set('n', '<leader>ts', function()
+  local namespaces = vim.diagnostic.get_namespaces()
+  local counts = {}
+  for _, d in ipairs(vim.diagnostic.get(0)) do
+    counts[d.namespace] = (counts[d.namespace] or 0) + 1
+  end
+
+  local items = {}
+  for ns_id, count in pairs(counts) do
+    table.insert(items, {
+      ns_id = ns_id,
+      -- LSP namespaces look like "nvim.lsp.codebook.1"; trim to the server name
+      name = (namespaces[ns_id].name:gsub('^nvim%.lsp%.', ''):gsub('%.%d+$', '')),
+      count = count,
+      enabled = vim.diagnostic.is_enabled { bufnr = 0, ns_id = ns_id },
+    })
+  end
+  if #items == 0 then return vim.notify 'No diagnostic sources in this buffer' end
+  table.sort(items, function(a, b) return a.name < b.name end)
+
+  vim.ui.select(items, {
+    prompt = 'Toggle diagnostic source',
+    format_item = function(i) return ('%s %s (%d)'):format(i.enabled and '●' or '○', i.name, i.count) end,
+  }, function(choice)
+    if not choice then return end
+    vim.diagnostic.enable(not choice.enabled, { bufnr = 0, ns_id = choice.ns_id })
+  end)
+end, { desc = '[T]oggle diagnostic [S]ource (buffer)' })
+
 -- Exit terminal mode in the builtin terminal with a shortcut that is a bit easier
 -- for people to discover. Otherwise, you normally need to press <C-\><C-n>, which
 -- is not what someone will guess without a bit more experience.
